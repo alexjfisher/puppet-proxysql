@@ -395,10 +395,10 @@ Since version 4 of this module, this defaults to `undef` and needs to be specifi
 provider for `package_source`. Defaults to `dpkg` for debian-based, and `rpm` for redhat systems.
 
 ##### `sys_owner`
-owner of the datadir and config_file, defaults to 'root'
+owner of the datadir and config_file, defaults to `root` or `proxysql` depending on `version`.
 
 ##### `sys_group`
-group of the datadir and config_file, defaults to 'root'
+owner of the datadir and config_file, defaults to the value of `sys_owner`.
 
 ##### `override_config_settings`
 Which configuration variables should be overriden. Hash, defaults to `{}` (empty hash).

@@ -40,15 +40,14 @@ describe 'proxysql' do
                                                             install_options: [])
           end
 
-          if facts[:operatingsystemrelease] == '18.04'
-            sys_user = 'proxysql'
-            sys_group = 'proxysql'
-            admin_socket = '/var/lib/proxysql/proxysql_admin.sock'
-          else
-            sys_user = 'root'
-            sys_group = 'root'
-            admin_socket = '/tmp/proxysql_admin.sock'
-          end
+          sys_user = 'proxysql'
+          sys_group = 'proxysql'
+
+          admin_socket = if facts[:operatingsystemrelease] == '18.04'
+                           '/var/lib/proxysql/proxysql_admin.sock'
+                         else
+                           '/tmp/proxysql_admin.sock'
+                         end
 
           it do
             is_expected.to contain_file('proxysql-config-file').with(ensure: 'file',

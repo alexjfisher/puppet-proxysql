@@ -102,10 +102,10 @@
 #   The 'type' of `package_checksum_value`. Optional and only applicable when `package_checksum_value` is provided.
 #
 # * `sys_owner`
-#   owner of the datadir and config_file, defaults to root.
+#   owner of the datadir and config_file, defaults to root or proxysql depending on `version`
 #
 # * `sys_group`
-#   group of the datadir and config_file, defaults to root.
+#   group of the datadir and config_file, defaults to root or proxysql depending on `version`
 #
 # * `override_config_settings`
 #   Which configuration variables should be overriden. Hash, defaults to {} (empty hash).
@@ -203,8 +203,11 @@ class proxysql (
   Array[String[1]]    $package_dependencies   = $proxysql::params::package_dependencies,
   Enum['dpkg','rpm']  $package_provider       = $proxysql::params::package_provider,
 
-  String $sys_owner = $proxysql::params::sys_owner,
-  String $sys_group = $proxysql::params::sys_group,
+  String $sys_owner = $version ? {
+    /^1/ => 'root',
+    /^2/ => 'proxysql',
+  },
+  String $sys_group = $sys_owner,
 
   String $cluster_username = $proxysql::params::cluster_username,
   Sensitive[String] $cluster_password = $proxysql::params::cluster_password,

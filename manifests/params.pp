@@ -29,9 +29,6 @@ class proxysql::params {
       $package_dependencies = []
 
       if $facts['os']['release']['major'] == '18.04' {
-        $_sys_owner   = 'proxysql'
-        $_sys_group   = 'proxysql'
-
         # The 2.0.x systemd service file in ubuntu 18.04 has `ReadWritePaths=/var/lib/proxysql /var/run/proxysql`.
         # This limits where we can write sockets.
         $_listen_socket = "${datadir}/proxysql.sock"
@@ -89,8 +86,6 @@ class proxysql::params {
   }
   $version = pick($short_proxysql_version_fact,'2.0.7')
 
-  $sys_owner = pick(getvar('_sys_owner'),'root')
-  $sys_group = pick(getvar('_sys_group'),'root')
   $listen_socket = pick(getvar('_listen_socket'),'/tmp/proxysql.sock')
   $admin_listen_socket = pick(getvar('_admin_listen_socket'),'/tmp/proxysql_admin.sock')
 
