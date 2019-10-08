@@ -82,8 +82,11 @@
 # * `manage_repo`
 #   Determines whether this module will manage the repositories where ProxySQL might be. Defaults to 'true'
 #
-# * `repo_version`
-#   Specifies the repo version of ProxySQL to be configured. Defaults to '1.4.x' ('2.0.x' for Ubuntu 18.04).
+# * `version`
+#   The version of proxysql being managed.  This parameter affects the repository configured when `manage_repo == true` and how the service is managed.
+#   It does not affect the package version being installed.  It is used as a hint to the puppet module on how to configure proxysql. To control the exact version
+#   deployed, use `package_name` or `package_source`.  Defaults to the version currently installed, or `2.0.7` if the `proxysql_version` fact is not yet
+#   available.
 #
 # * `package_source`
 #   location of a proxysql package.  When specified, this package will be installed with the `package\_provider` and the `manage_repo` setting will be ignored.
@@ -192,7 +195,7 @@ class proxysql (
   Boolean $save_to_disk = $proxysql::params::save_to_disk,
 
   Boolean $manage_repo = true,
-  Enum['2.0.x','1.4.x']  $repo_version = $proxysql::params::repo_version,
+  Pattern[/^[1|2]\.\d+\.\d+/] $version = $proxysql::params::version,
 
   Optional[String[1]] $package_source         = undef,
   Optional[String[1]] $package_checksum_value = undef,

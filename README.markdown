@@ -38,7 +38,16 @@ include proxysql
 ```
 
 By default, packages come from the official upstream package repositories which the module will configure.
-Most operating systems currently default to 1.4.x packages, but this can be changed with the `repo_version` parameter.
+On new installations, (by default), the 2.0.x repository will be configured. If ProxySQL is already installed, then the repository matching the currently installed version
+will be used.
+
+To force the use of 1.4.x packages, use the `version` parameter.  (Note, the example below does not force the installation of `1.4.16`, it only ensures the correct repository
+is configured and that proxysql will be configured as if the version installed is `1.4.16`)
+```puppet
+class { 'proxysql':
+  version => '1.4.16',
+}
+```
 
 To use your Operating System's own packages set `manage_repo => false`.
 ```puppet
@@ -372,8 +381,11 @@ Specifies whether the managed ProxySQL resources should be immediately save to d
 ##### `manage_repo`
 Determines whether this module will manage the repositories where ProxySQL might be. Defaults to 'true'
 
-#### `repo_version`
-Specifies the repo version. Possible values are '1.4.x' and '2.0.x'. String, defaults to '1.4.x' ('2.0.x' for Ubuntu 18.04).
+##### `version`
+The version of proxysql being managed.  This parameter affects the repository configured when `manage_repo == true` and how the service is managed.
+It does not affect the package version being installed.  It is used as a hint to the puppet module on how to configure proxysql. To control the exact version
+deployed, use `package_name` or `package_source`.  Defaults to the version currently installed, or `2.0.7` if the `proxysql_version` fact is not yet
+available.
 
 ##### `package_source`
 location of a proxysql package.  When specified, this package will be installed with the `package\_provider` and the `manage_repo` setting will be ignored.
