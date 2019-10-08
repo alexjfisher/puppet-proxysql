@@ -15,5 +15,8 @@ RSpec.configure do |c|
     if host[:platform] =~ %r{el-7-x86_64} && host[:hypervisor] =~ %r{docker}
       on(host, "sed -i '/nodocs/d' /etc/yum.conf")
     end
+    if fact('osfamily') == 'RedHat' && fact('operatingsystemmajrelease') == '7'
+      on host, puppet('module', 'install', 'camptocamp/systemd')
+    end
   end
 end
